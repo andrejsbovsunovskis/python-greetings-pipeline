@@ -13,6 +13,23 @@ jobs:
       - name: Installing dependencies info
         run: echo "Installing all required dependencies..."
 
+      - name: Checkout pipeline repository
+        uses: actions/checkout@v6
+
+      - name: Checkout python-greetings repository
+        uses: actions/checkout@v6
+        with:
+          repository: mtararujs/python-greetings
+          path: python-greetings
+
+      - name: Create virtual environment
+        working-directory: python-greetings
+        run: python3 -m venv venv
+
+      - name: Install pip dependencies
+        working-directory: python-greetings
+        run: ./venv/bin/python -m pip install -r requirements.txt
+
   deploy-to-dev:
     runs-on: self-hosted
     needs: install-pip-deps
