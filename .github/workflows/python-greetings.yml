@@ -10,8 +10,12 @@ jobs:
   install-pip-deps:
     runs-on: self-hosted
     steps:
+      - name: Checkout pipeline repository
+        uses: actions/checkout@v6
+
       - name: Installing dependencies info
         run: echo "Installing all required dependencies..."
+
       - name: Install Python dependencies
         uses: ./.github/actions/install-python-deps
 
@@ -19,8 +23,12 @@ jobs:
     runs-on: self-hosted
     needs: install-pip-deps
     steps:
+      - name: Checkout pipeline repository
+        uses: actions/checkout@v6
+
       - name: Deploy dev info
         run: echo "Deploying application to dev..."
+
       - name: Deploy to dev
         uses: ./.github/actions/deploy-python-app
         with:
@@ -31,8 +39,12 @@ jobs:
     runs-on: self-hosted
     needs: deploy-to-dev
     steps:
+      - name: Checkout pipeline repository
+        uses: actions/checkout@v6
+
       - name: Test dev info
         run: echo "Running tests on dev..."
+
       - name: Run dev tests
         uses: ./.github/actions/run-api-tests
         with:
@@ -42,8 +54,12 @@ jobs:
     runs-on: self-hosted
     needs: tests-on-dev
     steps:
+      - name: Checkout pipeline repository
+        uses: actions/checkout@v6
+
       - name: Deploy stg info
         run: echo "Deploying application to stg..."
+
       - name: Deploy to stg
         uses: ./.github/actions/deploy-python-app
         with:
@@ -54,8 +70,12 @@ jobs:
     runs-on: self-hosted
     needs: deploy-to-stg
     steps:
+      - name: Checkout pipeline repository
+        uses: actions/checkout@v6
+
       - name: Test stg info
         run: echo "Running tests on stg..."
+
       - name: Run stg tests
         uses: ./.github/actions/run-api-tests
         with:
@@ -65,8 +85,12 @@ jobs:
     runs-on: self-hosted
     needs: tests-on-stg
     steps:
+      - name: Checkout pipeline repository
+        uses: actions/checkout@v6
+
       - name: Deploy preprod info
         run: echo "Deploying application to preprod..."
+
       - name: Deploy to preprod
         uses: ./.github/actions/deploy-python-app
         with:
@@ -77,8 +101,12 @@ jobs:
     runs-on: self-hosted
     needs: deploy-to-preprod
     steps:
+      - name: Checkout pipeline repository
+        uses: actions/checkout@v6
+
       - name: Test preprod info
         run: echo "Running tests on preprod..."
+
       - name: Run preprod tests
         uses: ./.github/actions/run-api-tests
         with:
@@ -88,8 +116,12 @@ jobs:
     runs-on: self-hosted
     needs: tests-on-preprod
     steps:
+      - name: Checkout pipeline repository
+        uses: actions/checkout@v6
+
       - name: Deploy prod info
         run: echo "Deploying application to prod..."
+
       - name: Deploy to prod
         uses: ./.github/actions/deploy-python-app
         with:
@@ -100,8 +132,12 @@ jobs:
     runs-on: self-hosted
     needs: deploy-to-prod
     steps:
+      - name: Checkout pipeline repository
+        uses: actions/checkout@v6
+
       - name: Test prod info
         run: echo "Running tests on prod..."
+
       - name: Run prod tests
         uses: ./.github/actions/run-api-tests
         with:
