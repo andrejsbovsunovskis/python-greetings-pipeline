@@ -69,6 +69,23 @@ jobs:
       - name: Test dev info
         run: echo "Running tests on dev..."
 
+      - name: Checkout pipeline repository
+        uses: actions/checkout@v6
+
+      - name: Checkout course-js-api-framework repository
+        uses: actions/checkout@v6
+        with:
+          repository: mtararujs/course-js-api-framework
+          path: course-js-api-framework
+
+      - name: Install npm dependencies
+        working-directory: course-js-api-framework
+        run: npm install
+
+      - name: Run tests on dev
+        working-directory: course-js-api-framework
+        run: npm run greetings greetings_dev
+
   deploy-to-stg:
     runs-on: self-hosted
     needs: tests-on-dev
