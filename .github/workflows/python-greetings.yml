@@ -30,12 +30,37 @@ jobs:
         working-directory: python-greetings
         run: ./venv/bin/python -m pip install -r requirements.txt
 
-  deploy-to-dev:
-    runs-on: self-hosted
-    needs: install-pip-deps
-    steps:
-      - name: Deploy dev info
-        run: echo "Deploying application to dev..."
+    deploy-to-dev:
+      runs-on: self-hosted
+      needs: install-pip-deps
+      steps:
+        - name: Deploy dev info
+          run: echo "Deploying application to dev..."
+
+        - name: Checkout pipeline repository
+          uses: actions/checkout@v6
+
+        - name: Checkout python-greetings repository
+          uses: actions/checkout@v6
+          with:
+            repository: mtararujs/python-greetings
+            path: python-greetings
+
+        - name: Stop existing dev app if running
+          working-directory: python-greetings
+          run: pm2 delete greetings-app-dev || true
+
+        - name: Create virtual environment
+          working-directory: python-greetings
+          run: python3 -m venv venv
+
+        - name: Install pip dependencies
+          working-directory: python-greetings
+          run: ./venv/bin/python -m pip install -r requirements.txt
+
+        - name: Start dev app
+          working-directory: python-greetings
+          run: pm2 start app.py --interpreter ./venv/bin/python --name greetings-app-dev -- --port 7001
 
   tests-on-dev:
     runs-on: self-hosted
