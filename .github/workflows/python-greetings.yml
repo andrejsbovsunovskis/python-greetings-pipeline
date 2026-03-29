@@ -12,23 +12,8 @@ jobs:
     steps:
       - name: Installing dependencies info
         run: echo "Installing all required dependencies..."
-
-      - name: Checkout pipeline repository
-        uses: actions/checkout@v6
-
-      - name: Checkout python-greetings repository
-        uses: actions/checkout@v6
-        with:
-          repository: mtararujs/python-greetings
-          path: python-greetings
-
-      - name: Create virtual environment
-        working-directory: python-greetings
-        run: python3 -m venv venv
-
-      - name: Install pip dependencies
-        working-directory: python-greetings
-        run: ./venv/bin/python -m pip install -r requirements.txt
+      - name: Install Python dependencies
+        uses: ./.github/actions/install-python-deps
 
   deploy-to-dev:
     runs-on: self-hosted
@@ -36,31 +21,11 @@ jobs:
     steps:
       - name: Deploy dev info
         run: echo "Deploying application to dev..."
-
-      - name: Checkout pipeline repository
-        uses: actions/checkout@v6
-
-      - name: Checkout python-greetings repository
-        uses: actions/checkout@v6
+      - name: Deploy to dev
+        uses: ./.github/actions/deploy-python-app
         with:
-          repository: mtararujs/python-greetings
-          path: python-greetings
-
-      - name: Stop existing dev app if running
-        working-directory: python-greetings
-        run: pm2 delete greetings-app-dev || true
-
-      - name: Create virtual environment
-        working-directory: python-greetings
-        run: python3 -m venv venv
-
-      - name: Install pip dependencies
-        working-directory: python-greetings
-        run: ./venv/bin/python -m pip install -r requirements.txt
-
-      - name: Start dev app
-        working-directory: python-greetings
-        run: pm2 start app.py --interpreter ./venv/bin/python --name greetings-app-dev -- --port 7001
+          environment: dev
+          port: "7001"
 
   tests-on-dev:
     runs-on: self-hosted
@@ -68,23 +33,10 @@ jobs:
     steps:
       - name: Test dev info
         run: echo "Running tests on dev..."
-
-      - name: Checkout pipeline repository
-        uses: actions/checkout@v6
-
-      - name: Checkout course-js-api-framework repository
-        uses: actions/checkout@v6
+      - name: Run dev tests
+        uses: ./.github/actions/run-api-tests
         with:
-          repository: mtararujs/course-js-api-framework
-          path: course-js-api-framework
-
-      - name: Install npm dependencies
-        working-directory: course-js-api-framework
-        run: npm install
-
-      - name: Run tests on dev
-        working-directory: course-js-api-framework
-        run: npm run greetings greetings_dev
+          environment: dev
 
   deploy-to-stg:
     runs-on: self-hosted
@@ -92,31 +44,11 @@ jobs:
     steps:
       - name: Deploy stg info
         run: echo "Deploying application to stg..."
-
-      - name: Checkout pipeline repository
-        uses: actions/checkout@v6
-
-      - name: Checkout python-greetings repository
-        uses: actions/checkout@v6
+      - name: Deploy to stg
+        uses: ./.github/actions/deploy-python-app
         with:
-          repository: mtararujs/python-greetings
-          path: python-greetings
-
-      - name: Stop existing stg app if running
-        working-directory: python-greetings
-        run: pm2 delete greetings-app-stg || true
-
-      - name: Create virtual environment
-        working-directory: python-greetings
-        run: python3 -m venv venv
-
-      - name: Install pip dependencies
-        working-directory: python-greetings
-        run: ./venv/bin/python -m pip install -r requirements.txt
-
-      - name: Start stg app
-        working-directory: python-greetings
-        run: pm2 start app.py --interpreter ./venv/bin/python --name greetings-app-stg -- --port 7002
+          environment: stg
+          port: "7002"
 
   tests-on-stg:
     runs-on: self-hosted
@@ -124,23 +56,10 @@ jobs:
     steps:
       - name: Test stg info
         run: echo "Running tests on stg..."
-
-      - name: Checkout pipeline repository
-        uses: actions/checkout@v6
-
-      - name: Checkout course-js-api-framework repository
-        uses: actions/checkout@v6
+      - name: Run stg tests
+        uses: ./.github/actions/run-api-tests
         with:
-          repository: mtararujs/course-js-api-framework
-          path: course-js-api-framework
-
-      - name: Install npm dependencies
-        working-directory: course-js-api-framework
-        run: npm install
-
-      - name: Run tests on stg
-        working-directory: course-js-api-framework
-        run: npm run greetings greetings_stg
+          environment: stg
 
   deploy-to-preprod:
     runs-on: self-hosted
@@ -148,31 +67,11 @@ jobs:
     steps:
       - name: Deploy preprod info
         run: echo "Deploying application to preprod..."
-
-      - name: Checkout pipeline repository
-        uses: actions/checkout@v6
-
-      - name: Checkout python-greetings repository
-        uses: actions/checkout@v6
+      - name: Deploy to preprod
+        uses: ./.github/actions/deploy-python-app
         with:
-          repository: mtararujs/python-greetings
-          path: python-greetings
-
-      - name: Stop existing preprod app if running
-        working-directory: python-greetings
-        run: pm2 delete greetings-app-preprod || true
-
-      - name: Create virtual environment
-        working-directory: python-greetings
-        run: python3 -m venv venv
-
-      - name: Install pip dependencies
-        working-directory: python-greetings
-        run: ./venv/bin/python -m pip install -r requirements.txt
-
-      - name: Start preprod app
-        working-directory: python-greetings
-        run: pm2 start app.py --interpreter ./venv/bin/python --name greetings-app-preprod -- --port 7003
+          environment: preprod
+          port: "7003"
 
   tests-on-preprod:
     runs-on: self-hosted
@@ -180,23 +79,10 @@ jobs:
     steps:
       - name: Test preprod info
         run: echo "Running tests on preprod..."
-
-      - name: Checkout pipeline repository
-        uses: actions/checkout@v6
-
-      - name: Checkout course-js-api-framework repository
-        uses: actions/checkout@v6
+      - name: Run preprod tests
+        uses: ./.github/actions/run-api-tests
         with:
-          repository: mtararujs/course-js-api-framework
-          path: course-js-api-framework
-
-      - name: Install npm dependencies
-        working-directory: course-js-api-framework
-        run: npm install
-
-      - name: Run tests on preprod
-        working-directory: course-js-api-framework
-        run: npm run greetings greetings_preprod
+          environment: preprod
 
   deploy-to-prod:
     runs-on: self-hosted
@@ -204,31 +90,11 @@ jobs:
     steps:
       - name: Deploy prod info
         run: echo "Deploying application to prod..."
-
-      - name: Checkout pipeline repository
-        uses: actions/checkout@v6
-
-      - name: Checkout python-greetings repository
-        uses: actions/checkout@v6
+      - name: Deploy to prod
+        uses: ./.github/actions/deploy-python-app
         with:
-          repository: mtararujs/python-greetings
-          path: python-greetings
-
-      - name: Stop existing prod app if running
-        working-directory: python-greetings
-        run: pm2 delete greetings-app-prod || true
-
-      - name: Create virtual environment
-        working-directory: python-greetings
-        run: python3 -m venv venv
-
-      - name: Install pip dependencies
-        working-directory: python-greetings
-        run: ./venv/bin/python -m pip install -r requirements.txt
-
-      - name: Start prod app
-        working-directory: python-greetings
-        run: pm2 start app.py --interpreter ./venv/bin/python --name greetings-app-prod -- --port 7004
+          environment: prod
+          port: "7004"
 
   tests-on-prod:
     runs-on: self-hosted
@@ -236,20 +102,7 @@ jobs:
     steps:
       - name: Test prod info
         run: echo "Running tests on prod..."
-
-      - name: Checkout pipeline repository
-        uses: actions/checkout@v6
-
-      - name: Checkout course-js-api-framework repository
-        uses: actions/checkout@v6
+      - name: Run prod tests
+        uses: ./.github/actions/run-api-tests
         with:
-          repository: mtararujs/course-js-api-framework
-          path: course-js-api-framework
-
-      - name: Install npm dependencies
-        working-directory: course-js-api-framework
-        run: npm install
-
-      - name: Run tests on prod
-        working-directory: course-js-api-framework
-        run: npm run greetings greetings_prod
+          environment: prod
