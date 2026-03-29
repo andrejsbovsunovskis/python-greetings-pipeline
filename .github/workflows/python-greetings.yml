@@ -1,0 +1,70 @@
+name: Python Greetings Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  install-pip-deps:
+    runs-on: self-hosted
+    steps:
+      - name: Installing dependencies info
+        run: echo "Installing all required dependencies..."
+
+  deploy-to-dev:
+    runs-on: self-hosted
+    needs: install-pip-deps
+    steps:
+      - name: Deploy dev info
+        run: echo "Deploying application to dev..."
+
+  tests-on-dev:
+    runs-on: self-hosted
+    needs: deploy-to-dev
+    steps:
+      - name: Test dev info
+        run: echo "Running tests on dev..."
+
+  deploy-to-stg:
+    runs-on: self-hosted
+    needs: tests-on-dev
+    steps:
+      - name: Deploy stg info
+        run: echo "Deploying application to stg..."
+
+  tests-on-stg:
+    runs-on: self-hosted
+    needs: deploy-to-stg
+    steps:
+      - name: Test stg info
+        run: echo "Running tests on stg..."
+
+  deploy-to-preprod:
+    runs-on: self-hosted
+    needs: tests-on-stg
+    steps:
+      - name: Deploy preprod info
+        run: echo "Deploying application to preprod..."
+
+  tests-on-preprod:
+    runs-on: self-hosted
+    needs: deploy-to-preprod
+    steps:
+      - name: Test preprod info
+        run: echo "Running tests on preprod..."
+
+  deploy-to-prod:
+    runs-on: self-hosted
+    needs: tests-on-preprod
+    steps:
+      - name: Deploy prod info
+        run: echo "Deploying application to prod..."
+
+  tests-on-prod:
+    runs-on: self-hosted
+    needs: deploy-to-prod
+    steps:
+      - name: Test prod info
+        run: echo "Running tests on prod..."
